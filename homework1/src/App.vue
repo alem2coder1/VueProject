@@ -3,10 +3,8 @@
   <main class="container">
     <h1>Task Manager</h1>
 
-    <!-- 2) 模板语法：插值显示未完成数量 -->
     <p>Total: {{ tasks.length }} | Incomplete: {{ incompleteCount }}</p>
 
-    <!-- 过滤区（可选加分） -->
     <section class="filters">
       <label>
         Category:
@@ -30,17 +28,14 @@
       </label>
     </section>
 
-    <!-- 9) 表单绑定 + 8) 事件：添加任务 -->
     <TaskForm
         :categories="categories"
         :priorities="priorities"
         @add="addTask"
     />
 
-    <!-- 6) 条件渲染 -->
     <p v-if="filteredTasks.length === 0" class="empty">No tasks</p>
 
-    <!-- 7) 列表渲染 -->
     <TaskList
         v-else
         :tasks="filteredTasks"
@@ -51,15 +46,11 @@
 </template>
 
 <script setup>
-/**
- * 3) 响应式：任务列表放在 ref/ reactive
- * 4) 计算属性：incompleteCount + filteredTasks
- */
+
 import { ref, reactive, computed } from 'vue'
 import TaskForm from './components/task/form.vue'
 import TaskList from './components/task/list.vue'
 
-// 演示数据（可删）
 const tasks = ref([
   { id: 1, text: 'Buy milk', category: 'Life', priority: 'medium', done: false },
   { id: 2, text: 'Finish report', category: 'Work', priority: 'high', done: false },
@@ -74,10 +65,10 @@ const filters = reactive({
   onlyIncomplete: false,
 })
 
-// 4i) 未完成数量
+
 const incompleteCount = computed(() => tasks.value.filter(t => !t.done).length)
 
-// 4ii) 过滤后的列表
+
 const filteredTasks = computed(() => {
   return tasks.value.filter(t => {
     if (filters.category && t.category !== filters.category) return false
@@ -87,7 +78,6 @@ const filteredTasks = computed(() => {
   })
 })
 
-// 8) 事件处理：添加 / 删除 / 完成
 function addTask(payload) {
   const id = Date.now()
   tasks.value.push({ id, done: false, ...payload })
